@@ -2,22 +2,22 @@
 #include <iostream>
 #include <dlfcn.h>
 
-int main(int argc, char ** argv)
+int main(int argc, char *argv[])
 {
 	char *error;
 	void *libComposant1;
 	void *libComposant2;
 	int (*composant1)(int,int);
 	int (*composant2)(int,int);
-	char (*getComposant1Version);
+	const char (*getComposant1Version);
 	
-	libComposant1 = dlopen ("../lib/libComposant1.so",  RTLD_LOCAL|RTLD_LAZY);
+	libComposant1 = dlopen (argv[1], RTLD_LOCAL|RTLD_LAZY);
 	if (!libComposant1) {
 		fputs (dlerror(), stderr);
         exit(1);
     }
 	
-	libComposant2 = dlopen ("../lib/libComposant2.so", RTLD_LOCAL|RTLD_LAZY);
+	libComposant2 = dlopen (argv[2], RTLD_LOCAL|RTLD_LAZY);
 	if (!libComposant2) {
 		fputs (dlerror(), stderr);
 		exit(1);
