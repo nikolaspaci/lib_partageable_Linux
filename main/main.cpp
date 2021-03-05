@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 	void *libComposant2;
 	int (*composant1)(int,int);
 	int (*composant2)(int,int);
-	const char (*getComposant1Version);
+	char *(*getComposant1Version)();
 	
 	libComposant1 = dlopen (argv[1], RTLD_LOCAL|RTLD_LAZY);
 	if (!libComposant1) {
@@ -43,12 +43,13 @@ int main(int argc, char *argv[])
 	valeur1=composant1(data1,data2);
 	valeur2=composant2(data1,data2);
 
-	getComposant1Version=(char (*)) dlsym(libComposant1, "_Z20getComposant1Versionv");
+	getComposant1Version=(char *(*)()) dlsym(libComposant1, "_Z20getComposant1Versionv");
 	if ((error = dlerror()) != NULL)  {
 		fputs(error, stderr);
 		exit(1);
     }
-	
-	std::cout << getComposant1Version << std::endl;
+	std::cout << getComposant1Version() << std::endl;
 	std::cout << "valeur 1 :" << valeur1 << " valeur 2 :" << valeur2 << std::endl;
+	dlclose(libComposant1);
+	dlclose(libComposant2);
 }
